@@ -60,10 +60,13 @@ func (t *Table[T]) Insert(build func(id int) T, conflicts func(T) bool) (T, erro
 		}
 	}
 
-	row := build(t.data.NextID)
-	t.data.Rows[t.data.NextID] = row
+	id := t.data.NextID
+	row := build(id)
+	t.data.Rows[id] = row
 	t.data.NextID++
 	if err := t.persist(); err != nil {
+		delete(t.data.Rows, id)
+		t.data.NextID--
 		return zero, err
 	}
 	return row, nil
@@ -114,26 +117,36 @@ func (t *Table[T]) Update(id int, change func(*T) error) (T, error) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	row, ok := t.data.Rows[id]
+	old, ok := t.data.Rows[id]
 	if !ok {
-		return row, ErrNotFound
+		return old, ErrNotFound
 	}
+	row := old
 	if err := change(&row); err != nil {
-		return row, err
+		return old, err
 	}
 	t.data.Rows[id] = row
-	return row, t.persist()
+	if err := t.persist(); err != nil {
+		t.data.Rows[id] = old
+		return old, err
+	}
+	return row, nil
 }
 
 func (t *Table[T]) Delete(id int) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	if _, ok := t.data.Rows[id]; !ok {
+	old, ok := t.data.Rows[id]
+	if !ok {
 		return ErrNotFound
 	}
 	delete(t.data.Rows, id)
-	return t.persist()
+	if err := t.persist(); err != nil {
+		t.data.Rows[id] = old
+		return err
+	}
+	return nil
 }
 
 // DeleteWhere elimina todos los registros que cumplen match.
@@ -141,24 +154,28 @@ func (t *Table[T]) DeleteWhere(match func(T) bool) error {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	removed := false
+	removed := map[int]T{}
 	for id, row := range t.data.Rows {
 		if match(row) {
+			removed[id] = row
 			delete(t.data.Rows, id)
-			removed = true
 		}
 	}
-	if !removed {
+	if len(removed) == 0 {
 		return nil
 	}
-	return t.persist()
+	if err := t.persist(); err != nil {
+		maps.Copy(t.data.Rows, removed)
+		return err
+	}
+	return nil
 }
 
 func (t *Table[T]) sortedIDs() []int {
 	return slices.Sorted(maps.Keys(t.data.Rows))
 }
 
-// persist escribe en un archivo temporal y lo renombra para no dejar el
+// persist escribe en un archivo temporal y lo renombra, para no dejar el
 // archivo a medias si el proceso se interrumpe.
 func (t *Table[T]) persist() error {
 	raw, err := json.MarshalIndent(t.data, "", "  ")
