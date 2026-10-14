@@ -25,14 +25,20 @@ type PublishInput struct {
 	Mileage int
 }
 
-// Catalog devuelve las publicaciones visibles al público (HU-VIS-01).
-func (s *Vehicles) Catalog() []models.Listing {
-	published := s.vehicles.Filter(func(v models.Vehicle) bool { return v.Status == models.StatusPublished })
-	listings := make([]models.Listing, 0, len(published))
-	for _, v := range published {
-		listings = append(listings, s.toListing(v))
-	}
-	return listings
+// List devuelve las publicaciones que el solicitante puede ver. Un visitante
+// (viewer nil) ve las publicadas (HU-VIS-01); un vendedor, además, las suyas
+// de cualquier estado (HU-VEN-01); un administrador, todas (HU-ADM-01).
+func (s *Vehicles) List(viewer *models.User) []models.Listing {
+	return s.toListings(s.vehicles.Filter(func(v models.Vehicle) bool {
+		switch {
+		case viewer == nil:
+			return v.Status == models.StatusPublished
+		case viewer.Role == models.RoleAdmin:
+			return true
+		default:
+			return v.Status == models.StatusPublished || v.SellerID == viewer.ID
+		}
+	}))
 }
 
 // Listing devuelve un vehículo publicado con el contacto de su vendedor
@@ -97,6 +103,20 @@ func (s *Vehicles) Approve(vehicleID int) (models.Vehicle, error) {
 // Delete elimina una publicación (HU-ADM-01).
 func (s *Vehicles) Delete(vehicleID int) error {
 	return translate(s.vehicles.Delete(vehicleID))
+}
+
+// DeleteBySeller elimina todas las publicaciones de un vendedor. Lo usa
+// Accounts al eliminar un usuario.
+func (s *Vehicles) DeleteBySeller(sellerID int) error {
+	return s.vehicles.DeleteWhere(func(v models.Vehicle) bool { return v.SellerID == sellerID })
+}
+
+func (s *Vehicles) toListings(vehicles []models.Vehicle) []models.Listing {
+	listings := make([]models.Listing, 0, len(vehicles))
+	for _, v := range vehicles {
+		listings = append(listings, s.toListing(v))
+	}
+	return listings
 }
 
 func (s *Vehicles) toListing(v models.Vehicle) models.Listing {

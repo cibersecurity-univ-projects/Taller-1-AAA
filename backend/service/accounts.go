@@ -12,11 +12,11 @@ import (
 
 type Accounts struct {
 	users    *storage.Table[models.User]
-	vehicles *storage.Table[models.Vehicle]
+	vehicles *Vehicles
 	sessions *auth.Sessions
 }
 
-func NewAccounts(users *storage.Table[models.User], vehicles *storage.Table[models.Vehicle], sessions *auth.Sessions) *Accounts {
+func NewAccounts(users *storage.Table[models.User], vehicles *Vehicles, sessions *auth.Sessions) *Accounts {
 	return &Accounts{users: users, vehicles: vehicles, sessions: sessions}
 }
 
@@ -75,7 +75,7 @@ func (a *Accounts) Delete(userID int) error {
 	if user.Role != models.RoleSeller {
 		return ErrInvalidState
 	}
-	if err := a.vehicles.DeleteWhere(func(v models.Vehicle) bool { return v.SellerID == userID }); err != nil {
+	if err := a.vehicles.DeleteBySeller(userID); err != nil {
 		return err
 	}
 	return translate(a.users.Delete(userID))

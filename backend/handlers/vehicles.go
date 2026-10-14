@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
 	"automarket/auth"
 	"automarket/models"
@@ -18,17 +19,30 @@ func NewVehicleHandler(vehicles *service.Vehicles) *VehicleHandler {
 	return &VehicleHandler{vehicles: vehicles}
 }
 
+// minVehicleYear es el modelo más antiguo que se acepta publicar.
+const minVehicleYear = 1950
+
 type publishRequest struct {
 	Brand   string `json:"brand" binding:"required,max=50"`
 	Model   string `json:"model" binding:"required,max=50"`
-	Year    int    `json:"year" binding:"required,min=1900,max=2100"`
+	Year    int    `json:"year" binding:"required,min=1950"`
 	Price   int64  `json:"price" binding:"required,gt=0"`
 	Mileage int    `json:"mileage" binding:"min=0"`
 }
 
-// Catalog: GET /vehicles (público)
+// validYear acepta desde minVehicleYear hasta el año siguiente al actual
+// (los modelos del próximo año se venden antes de que empiece).
+func validYear(year int) bool {
+	return year >= minVehicleYear && year <= time.Now().Year()+1
+}
+
+// Catalog: GET /vehicles (público; el contenido depende del rol)
 func (h *VehicleHandler) Catalog(c *gin.Context) {
-	c.JSON(http.StatusOK, h.vehicles.Catalog())
+	var viewer *models.User
+	if user, ok := auth.Actor(c); ok {
+		viewer = &user
+	}
+	c.JSON(http.StatusOK, h.vehicles.List(viewer))
 }
 
 // Detail: GET /vehicles/:id (público)
@@ -49,6 +63,10 @@ func (h *VehicleHandler) Detail(c *gin.Context) {
 func (h *VehicleHandler) Publish(c *gin.Context) {
 	var req publishRequest
 	if !bindJSON(c, &req) {
+		return
+	}
+	if !validYear(req.Year) {
+		badRequest(c, "year fuera del rango permitido")
 		return
 	}
 	seller, _ := auth.Actor(c)
