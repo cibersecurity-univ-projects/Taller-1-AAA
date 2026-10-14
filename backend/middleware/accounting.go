@@ -10,8 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const anonymousRole = "visitante"
-
 // Accounting registra en la bitácora toda solicitud atendida, incluidas las
 // públicas y las rechazadas por autenticación o autorización. Debe ser el
 // primer middleware para observar el resultado final de cada solicitud.
@@ -20,7 +18,7 @@ func Accounting(logger *audit.Logger) gin.HandlerFunc {
 		c.Next()
 
 		entry := models.AuditEntry{
-			ActorRole: anonymousRole,
+			ActorRole: string(models.RoleVisitor),
 			ClientIP:  c.ClientIP(),
 			Method:    c.Request.Method,
 			Operation: c.FullPath(),
@@ -30,6 +28,10 @@ func Accounting(logger *audit.Logger) gin.HandlerFunc {
 		if user, ok := auth.Actor(c); ok {
 			entry.ActorID = user.ID
 			entry.ActorRole = string(user.Role)
+		} else {
+			// Sin identidad verificada, el correo intentado es el único
+			// rastro de contra qué cuenta iba la solicitud.
+			entry.Email = auth.Email(c)
 		}
 		if err := logger.Record(entry); err != nil {
 			log.Printf("auditoría: no se pudo registrar %s %s: %v", entry.Method, entry.Resource, err)
