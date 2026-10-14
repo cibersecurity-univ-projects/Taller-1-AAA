@@ -2,13 +2,14 @@ package models
 
 import "time"
 
-// Role identifica el rol de un usuario autenticado. El visitante no tiene
-// cuenta, por eso no existe como rol persistido.
+// Role identifica el rol de un usuario registrado. El visitante no tiene cuenta:
+// solo se usa para identificar a quien opera sin sesión (Accounting).
 type Role string
 
 const (
-	RoleSeller Role = "vendedor"
-	RoleAdmin  Role = "administrador"
+	RoleSeller  Role = "vendedor"
+	RoleAdmin   Role = "administrador"
+	RoleVisitor Role = "visitante"
 )
 
 type User struct {

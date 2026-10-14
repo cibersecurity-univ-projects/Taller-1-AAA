@@ -34,6 +34,20 @@ func Authenticate(accounts *service.Accounts) gin.HandlerFunc {
 	}
 }
 
+// OptionalAuthenticate identifica al solicitante si trae un token y deja
+// pasar al visitante si no trae ninguno. Un token presente pero inválido se
+// rechaza: no se degrada en silencio a visitante.
+func OptionalAuthenticate(accounts *service.Accounts) gin.HandlerFunc {
+	authenticate := Authenticate(accounts)
+	return func(c *gin.Context) {
+		if c.GetHeader("Authorization") == "" {
+			c.Next()
+			return
+		}
+		authenticate(c)
+	}
+}
+
 func reject(c *gin.Context, status int, message string) {
 	if status == http.StatusUnauthorized {
 		c.Header("WWW-Authenticate", "Bearer")

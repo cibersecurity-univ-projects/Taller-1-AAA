@@ -14,6 +14,9 @@ type AuditEntry struct {
 	Operation string    `json:"operation"`
 	Resource  string    `json:"resource"`
 	Status    int       `json:"status"`
-	PrevHash  string    `json:"prev_hash"`
-	Hash      string    `json:"hash"`
+	// Email es el correo con que se intentó autenticar o registrar quien no
+	// pudo ser identificado. Va vacío en el resto de operaciones.
+	Email    string `json:"email,omitempty"`
+	PrevHash string `json:"prev_hash"`
+	Hash     string `json:"hash"`
 }
