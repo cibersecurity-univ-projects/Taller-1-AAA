@@ -1,0 +1,99 @@
+{{template "header" .}}
+<section class="intro">
+  <h1>Moderación</h1>
+  <p>Autoriza las publicaciones pendientes y elimina publicaciones o vendedores cuando sea necesario.</p>
+</section>
+
+<section class="panel">
+  <h2>Pendientes de autorización <span class="count">{{len .Pending}}</span></h2>
+  {{if .Pending}}
+    <ul class="rows">
+      {{range .Pending}}
+        <li class="row">
+          <div>
+            <strong>{{.Brand}} {{.Model}} {{.Year}}</strong>
+            <span class="meta">$ {{money .Price}} · {{money .Mileage}} km · {{.Seller.Name}} · {{.Seller.Email}}</span>
+          </div>
+          <div class="actions">
+            <form method="post" action="/admin/vehicles/{{.ID}}/approve">
+              <button class="btn small" type="submit">Autorizar</button>
+            </form>
+            <a class="btn danger small" href="#pub-{{.ID}}">Eliminar publicación</a>
+            <a class="btn danger small" href="#usr-{{.ID}}">Eliminar vendedor</a>
+          </div>
+          {{template "confirm" confirm
+            (printf "pub-%d" .ID) (printf "/admin/vehicles/%d/delete" .ID)
+            "Eliminar publicación"
+            (printf "Se eliminará %s %s %d. Esta acción no se puede deshacer." .Brand .Model .Year)
+            "Sí, eliminar" "solid-danger"}}
+          {{template "confirm" confirm
+            (printf "usr-%d" .ID) (printf "/admin/users/%d/delete" .SellerID)
+            "Eliminar vendedor"
+            (printf "Se eliminará a %s y todas sus publicaciones. Esta acción no se puede deshacer." .Seller.Name)
+            "Sí, eliminar" "solid-danger"}}
+        </li>
+      {{end}}
+    </ul>
+  {{else}}
+    <div class="empty compact"><p>No hay publicaciones pendientes.</p></div>
+  {{end}}
+</section>
+
+<section class="panel">
+  <h2>Publicadas <span class="count">{{len .Published}}</span></h2>
+  {{if .Published}}
+    <ul class="rows">
+      {{range .Published}}
+        <li class="row">
+          <div>
+            <strong>{{.Brand}} {{.Model}} {{.Year}}</strong>
+            <span class="meta">$ {{money .Price}} · {{money .Mileage}} km · {{.Seller.Name}} · {{.Seller.Email}}</span>
+          </div>
+          <div class="actions">
+            <a class="btn danger small" href="#pub-{{.ID}}">Eliminar publicación</a>
+            <a class="btn danger small" href="#usr-{{.ID}}">Eliminar vendedor</a>
+          </div>
+          {{template "confirm" confirm
+            (printf "pub-%d" .ID) (printf "/admin/vehicles/%d/delete" .ID)
+            "Eliminar publicación"
+            (printf "Se eliminará %s %s %d. Esta acción no se puede deshacer." .Brand .Model .Year)
+            "Sí, eliminar" "solid-danger"}}
+          {{template "confirm" confirm
+            (printf "usr-%d" .ID) (printf "/admin/users/%d/delete" .SellerID)
+            "Eliminar vendedor"
+            (printf "Se eliminará a %s y todas sus publicaciones. Esta acción no se puede deshacer." .Seller.Name)
+            "Sí, eliminar" "solid-danger"}}
+        </li>
+      {{end}}
+    </ul>
+  {{else}}
+    <div class="empty compact"><p>No hay publicaciones visibles en el catálogo.</p></div>
+  {{end}}
+</section>
+
+<section class="panel">
+  <h2>Vendidas <span class="count">{{len .Sold}}</span></h2>
+  {{if .Sold}}
+    <ul class="rows">
+      {{range .Sold}}
+        <li class="row">
+          <div>
+            <strong>{{.Brand}} {{.Model}} {{.Year}}</strong>
+            <span class="meta">$ {{money .Price}} · {{.Seller.Name}} · {{.Seller.Email}}</span>
+          </div>
+          <div class="actions">
+            <a class="btn danger small" href="#pub-{{.ID}}">Eliminar publicación</a>
+          </div>
+          {{template "confirm" confirm
+            (printf "pub-%d" .ID) (printf "/admin/vehicles/%d/delete" .ID)
+            "Eliminar publicación"
+            (printf "Se eliminará %s %s %d. Esta acción no se puede deshacer." .Brand .Model .Year)
+            "Sí, eliminar" "solid-danger"}}
+        </li>
+      {{end}}
+    </ul>
+  {{else}}
+    <div class="empty compact"><p>No hay publicaciones vendidas.</p></div>
+  {{end}}
+</section>
+{{template "footer" .}}

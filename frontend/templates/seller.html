@@ -1,0 +1,53 @@
+{{template "header" .}}
+<section class="intro">
+  <h1>Mis publicaciones</h1>
+  <p>Publica un vehículo y reporta cuando lo vendas. Cada publicación nueva espera la autorización de un administrador.</p>
+</section>
+
+<div class="split">
+  <section class="panel">
+    <h2>Nueva publicación</h2>
+    <form method="post" action="/seller/publish" class="form">
+      <div class="two">
+        <label>Marca <input name="brand" maxlength="50" required></label>
+        <label>Modelo <input name="model" maxlength="50" required></label>
+      </div>
+      <div class="two">
+        <label>Año <input name="year" type="number" min="{{.MinYear}}" max="{{.MaxYear}}" required></label>
+        <label>Kilometraje <input name="mileage" type="number" min="0" value="0"></label>
+      </div>
+      <label>Precio (COP) <input name="price" type="number" min="1" required></label>
+      <button class="btn full" type="submit">Publicar vehículo</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Tus publicaciones</h2>
+    {{if .Mine}}
+      <ul class="rows">
+        {{range .Mine}}
+          <li class="row">
+            <div>
+              <strong>{{.Brand}} {{.Model}} {{.Year}}</strong>
+              <span class="meta">$ {{money .Price}} · {{money .Mileage}} km</span>
+              <span class="badge {{.Status}}">{{status .Status}}</span>
+            </div>
+            {{if ne .Status "vendida"}}
+              <a class="btn ghost small" href="#vender-{{.ID}}">Reportar venta</a>
+              {{template "confirm" confirm
+                (printf "vender-%d" .ID)
+                (printf "/seller/vehicles/%d/sold" .ID)
+                "Reportar venta"
+                (printf "%s %s %d ya se vendió. Saldrá del catálogo público." .Brand .Model .Year)
+                "Sí, ya se vendió"
+                ""}}
+            {{end}}
+          </li>
+        {{end}}
+      </ul>
+    {{else}}
+      <div class="empty compact"><p>Todavía no has publicado vehículos.</p></div>
+    {{end}}
+  </section>
+</div>
+{{template "footer" .}}

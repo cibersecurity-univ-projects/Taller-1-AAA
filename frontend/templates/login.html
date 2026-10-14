@@ -1,0 +1,22 @@
+{{template "header" .}}
+<section class="auth">
+  <h1>Iniciar sesión</h1>
+  <p class="sub">Para vendedores y administradores.</p>
+
+  {{if .Registered}}<div class="flash ok">Cuenta creada. Ya puedes iniciar sesión.</div>{{end}}
+  {{if .Expired}}<div class="flash error">Tu sesión expiró. Inicia sesión de nuevo.</div>{{end}}
+  {{if .Error}}<div class="flash error" role="alert">{{.Error}}</div>{{end}}
+
+  <form method="post" action="/login" class="form">
+    <label>Correo
+      <input name="email" type="email" value="{{.Email}}" autocomplete="username" required autofocus>
+    </label>
+    <label>Contraseña
+      <input name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <button class="btn full" type="submit">Entrar</button>
+  </form>
+
+  <p class="alt">¿Quieres vender un vehículo? <a href="/register">Regístrate como vendedor</a></p>
+</section>
+{{template "footer" .}}
