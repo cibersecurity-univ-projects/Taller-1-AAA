@@ -35,11 +35,16 @@ func respondError(c *gin.Context, err error) {
 	c.JSON(http.StatusInternalServerError, gin.H{"error": "error interno"})
 }
 
+// badRequest responde 400 con el detalle de por qué los datos no son válidos.
+func badRequest(c *gin.Context, detail string) {
+	c.JSON(http.StatusBadRequest, gin.H{"error": "datos inválidos: " + detail})
+}
+
 // bindJSON valida el cuerpo contra las reglas `binding` del destino y
 // responde 400 si no las cumple.
 func bindJSON(c *gin.Context, dst any) bool {
 	if err := c.ShouldBindJSON(dst); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "datos inválidos: " + err.Error()})
+		badRequest(c, err.Error())
 		return false
 	}
 	return true

@@ -21,7 +21,7 @@ type registerRequest struct {
 	Name     string `json:"name" binding:"required,max=100"`
 	Email    string `json:"email" binding:"required,email,max=254"`
 	Phone    string `json:"phone" binding:"required,max=20"`
-	Password string `json:"password" binding:"required,min=8,max=128"`
+	Password string `json:"password" binding:"required,min=12,max=128"`
 }
 
 type loginRequest struct {
@@ -35,6 +35,7 @@ func (h *AccountHandler) Register(c *gin.Context) {
 	if !bindJSON(c, &req) {
 		return
 	}
+	auth.SetEmail(c, req.Email)
 	user, err := h.accounts.Register(service.RegisterInput{
 		Name:     req.Name,
 		Email:    req.Email,
@@ -55,6 +56,7 @@ func (h *AccountHandler) Login(c *gin.Context) {
 	if !bindJSON(c, &req) {
 		return
 	}
+	auth.SetEmail(c, req.Email)
 	user, token, err := h.accounts.Login(req.Email, req.Password)
 	if err != nil {
 		respondError(c, err)
