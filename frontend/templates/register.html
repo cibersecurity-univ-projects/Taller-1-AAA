@@ -1,0 +1,27 @@
+{{template "header" .}}
+<section class="auth">
+  <h1>Registrarse como vendedor</h1>
+  <p class="sub">Publica tus vehículos y reporta tus ventas.</p>
+
+  {{if .Error}}<div class="flash error" role="alert">{{.Error}}</div>{{end}}
+
+  <form method="post" action="/register" class="form">
+    <label>Nombre completo
+      <input name="name" value="{{.Name}}" maxlength="100" required autofocus>
+    </label>
+    <label>Correo
+      <input name="email" type="email" value="{{.Email}}" maxlength="254" autocomplete="username" required>
+    </label>
+    <label>Teléfono
+      <input name="phone" type="tel" value="{{.Phone}}" maxlength="20" required>
+    </label>
+    <label>Contraseña
+      <input name="password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required>
+      <small>Mínimo 12 caracteres. Una frase larga es más segura que una clave corta con símbolos.</small>
+    </label>
+    <button class="btn full" type="submit">Crear cuenta</button>
+  </form>
+
+  <p class="alt">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+</section>
+{{template "footer" .}}
