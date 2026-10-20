@@ -32,12 +32,12 @@ Abra `http://localhost:3000`.
 
 | Ruta | Quién | Qué muestra |
 |---|---|---|
-| `/` | Todos | Catálogo: tarjetas con marca, modelo, precio, año y kilometraje |
-| `/vehicles/:id` | Todos | Detalle del vehículo. Los datos de contacto del vendedor aparecen al pulsar **Ver datos de contacto** |
+| `/` | Todos | Catálogo: tarjetas con la primera foto, marca, modelo, precio, año y kilometraje |
+| `/vehicles/:id` | Todos | Detalle del vehículo, con su galería de fotos. Los datos de contacto del vendedor aparecen al pulsar **Ver datos de contacto** |
 | `/login` | Todos | Inicio de sesión de vendedores y administradores |
 | `/register` | Todos | Registro como vendedor |
-| `/seller` | Vendedor | Formulario de nueva publicación y sus publicaciones, con **Reportar venta** |
-| `/admin` | Administrador | Pendientes, publicadas y vendidas, con **Autorizar** y eliminar publicación o vendedor |
+| `/seller` | Vendedor | Formulario de nueva publicación (con hasta 12 fotos) y sus publicaciones, con **Reportar venta** |
+| `/admin` | Administrador | Pendientes (con miniaturas de sus fotos), publicadas y vendidas, con **Autorizar** y eliminar publicación o vendedor |
 
 En la esquina superior derecha aparecen **Iniciar sesión** y **Registrarse como
 vendedor**; con sesión iniciada, **Mi panel** y **Salir**.
@@ -58,6 +58,7 @@ Navegador ──► Interfaz (Gin + plantillas) ──► API del backend
   consulta sin token; los paneles, con el token del usuario.
 - Los permisos los decide siempre el backend: si alguien intenta abrir un panel que
   no le corresponde, recibe un aviso de falta de permiso.
+- Las fotos se piden al backend a través de la interfaz, con la sesión de la persona: las de una publicación pendiente solo las ven su dueño y el administrador.
 - Los textos se muestran escapados por `html/template`, de modo que el contenido
   introducido por los usuarios nunca se interpreta como HTML.
 
@@ -78,6 +79,7 @@ static/        hoja de estilos
   sesión de nuevo.
 - **Las ventanas de confirmación son solo CSS** (selector `:target`): se cierran con
   *Cancelar* o haciendo clic fuera, pero no con la tecla Esc.
-- No hay fotos de los vehículos ni ubicación: la API no maneja esos datos.
+- Las fotos solo se pueden subir al publicar, y son JPEG o PNG de hasta 2 MB (máximo 12). Las fotos tomadas en vertical pueden verse giradas, porque el backend descarta sus metadatos.
+- No hay ubicación: la API no maneja ese dato.
 - Pensada para demostración; no incluye protección contra falsificación de
   solicitudes (CSRF) más allá de `SameSite=Lax`, ni TLS.
