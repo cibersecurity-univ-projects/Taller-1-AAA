@@ -5,20 +5,23 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
+	"strconv"
 	"time"
 )
 
 // Vehicle y Listing reflejan las respuestas JSON del backend.
 type Vehicle struct {
-	ID       int    `json:"id"`
-	SellerID int    `json:"seller_id"`
-	Brand    string `json:"brand"`
-	Model    string `json:"model"`
-	Year     int    `json:"year"`
-	Price    int64  `json:"price"`
-	Mileage  int64  `json:"mileage"`
-	Status   string `json:"status"`
+	ID       int      `json:"id"`
+	SellerID int      `json:"seller_id"`
+	Brand    string   `json:"brand"`
+	Model    string   `json:"model"`
+	Year     int      `json:"year"`
+	Price    int64    `json:"price"`
+	Mileage  int64    `json:"mileage"`
+	Images   []string `json:"images"`
+	Status   string   `json:"status"`
 }
 
 type Contact struct {
@@ -63,19 +66,25 @@ func newBackend(base string) *backend {
 
 func (b *backend) do(method, path, token string, in, out any) error {
 	var body io.Reader
+	contentType := ""
 	if in != nil {
 		raw, err := json.Marshal(in)
 		if err != nil {
 			return err
 		}
-		body = bytes.NewReader(raw)
+		body, contentType = bytes.NewReader(raw), "application/json"
 	}
+	return b.send(method, path, token, body, contentType, out)
+}
+
+// send hace la petición y lee la respuesta; do y publish solo cambian el cuerpo.
+func (b *backend) send(method, path, token string, body io.Reader, contentType string, out any) error {
 	req, err := http.NewRequest(method, b.base+path, body)
 	if err != nil {
 		return err
 	}
-	if in != nil {
-		req.Header.Set("Content-Type", "application/json")
+	if contentType != "" {
+		req.Header.Set("Content-Type", contentType)
 	}
 	if token != "" {
 		req.Header.Set("Authorization", "Bearer "+token)
@@ -131,9 +140,34 @@ func (b *backend) register(name, email, phone, password string) error {
 	}, nil)
 }
 
-func (b *backend) publish(token string, in publishInput) (Vehicle, error) {
+// uploadFile es una imagen que eligió la persona al publicar.
+type uploadFile struct {
+	name string
+	data []byte
+}
+
+// publish envía la publicación como multipart/form-data, que es como el
+// backend recibe los datos junto con las imágenes. Escribir en un
+// bytes.Buffer no falla, por eso no se revisan esos errores.
+func (b *backend) publish(token string, in publishInput, images []uploadFile) (Vehicle, error) {
+	var body bytes.Buffer
+	form := multipart.NewWriter(&body)
+	form.WriteField("brand", in.Brand)
+	form.WriteField("model", in.Model)
+	form.WriteField("year", strconv.Itoa(in.Year))
+	form.WriteField("price", strconv.FormatInt(in.Price, 10))
+	form.WriteField("mileage", strconv.FormatInt(in.Mileage, 10))
+	for _, image := range images {
+		part, err := form.CreateFormFile("images", image.name)
+		if err != nil {
+			return Vehicle{}, err
+		}
+		part.Write(image.data)
+	}
+	form.Close()
+
 	var v Vehicle
-	err := b.do(http.MethodPost, "/vehicles", token, in, &v)
+	err := b.send(http.MethodPost, "/vehicles", token, &body, form.FormDataContentType(), &v)
 	return v, err
 }
 

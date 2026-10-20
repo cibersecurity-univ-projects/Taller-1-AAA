@@ -264,7 +264,7 @@ func (a *app) publish(c *gin.Context) {
 		Year:    year,
 		Price:   price,
 		Mileage: mileage,
-	})
+	}, nil)
 	if err != nil {
 		a.fail(c, id, err, "/seller", badData, "No se pudo publicar.")
 		return
