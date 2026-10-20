@@ -7,6 +7,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"strconv"
 	"time"
 )
@@ -169,6 +170,19 @@ func (b *backend) publish(token string, in publishInput, images []uploadFile) (V
 	var v Vehicle
 	err := b.send(http.MethodPost, "/vehicles", token, &body, form.FormDataContentType(), &v)
 	return v, err
+}
+
+// image pide una imagen al backend con el token de la persona (si lo hay) y
+// devuelve la respuesta sin leerla, para que quien llama la reenvíe.
+func (b *backend) image(token string, id int, name string) (*http.Response, error) {
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/vehicles/%d/images/%s", b.base, id, url.PathEscape(name)), nil)
+	if err != nil {
+		return nil, err
+	}
+	if token != "" {
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
+	return b.client.Do(req)
 }
 
 func (b *backend) markSold(token string, id int) (Vehicle, error) {

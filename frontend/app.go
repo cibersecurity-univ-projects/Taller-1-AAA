@@ -168,6 +168,34 @@ func (a *app) detail(c *gin.Context) {
 	}
 }
 
+// image reenvía una imagen del backend. Se pide con la sesión de la persona,
+// si la hay: las de una publicación pendiente solo las ven su dueño y el
+// administrador, y el backend responde 404 a cualquier otro.
+func (a *app) image(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.Status(http.StatusNotFound)
+		return
+	}
+	token := ""
+	if _, s, ok := a.current(c); ok {
+		token = s.Token
+	}
+	resp, err := a.api.image(token, id, c.Param("name"))
+	if err != nil {
+		c.Status(http.StatusBadGateway)
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		c.Status(http.StatusNotFound)
+		return
+	}
+	c.Header("X-Content-Type-Options", "nosniff")
+	c.Header("Cache-Control", "private")
+	c.DataFromReader(http.StatusOK, resp.ContentLength, resp.Header.Get("Content-Type"), resp.Body, nil)
+}
+
 // ---------- Sesión ----------
 
 func (a *app) loginPage(c *gin.Context) {

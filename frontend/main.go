@@ -51,6 +51,7 @@ func main() {
 
 	r.GET("/", a.catalog)
 	r.GET("/vehicles/:id", a.detail)
+	r.GET("/images/:id/:name", a.image)
 	r.GET("/login", a.loginPage)
 	r.POST("/login", a.login)
 	r.GET("/register", a.registerPage)
