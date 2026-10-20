@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"slices"
 	"strconv"
@@ -16,6 +17,9 @@ const (
 	roleSeller = "vendedor"
 	roleAdmin  = "administrador"
 	minYear    = 1950
+
+	maxImageBytes  = 2 << 20                  // 2 MB por imagen
+	maxUploadBytes = 12*maxImageBytes + 1<<20 // doce imágenes y los demás campos
 )
 
 type app struct {
@@ -248,11 +252,13 @@ func (a *app) sellerPage(c *gin.Context) {
 
 func (a *app) publish(c *gin.Context) {
 	id, s, _ := a.current(c)
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, maxUploadBytes)
 	year, errYear := strconv.Atoi(c.PostForm("year"))
 	price, errPrice := strconv.ParseInt(c.PostForm("price"), 10, 64)
 	mileage, errMileage := strconv.ParseInt(c.DefaultPostForm("mileage", "0"), 10, 64)
-	badData := fmt.Sprintf("Revisa los datos: el año debe estar entre %d y %d y el precio debe ser mayor que cero.", minYear, time.Now().Year()+1)
-	if errYear != nil || errPrice != nil || errMileage != nil {
+	badData := fmt.Sprintf("Revisa los datos: el año debe estar entre %d y %d, el precio debe ser mayor que cero y las imágenes, JPEG o PNG de máximo 2 MB (hasta 12).", minYear, time.Now().Year()+1)
+	images, errImages := uploadedImages(c)
+	if errYear != nil || errPrice != nil || errMileage != nil || errImages != nil {
 		a.notice(c, "error", badData)
 		c.Redirect(http.StatusSeeOther, "/seller")
 		return
@@ -264,13 +270,40 @@ func (a *app) publish(c *gin.Context) {
 		Year:    year,
 		Price:   price,
 		Mileage: mileage,
-	}, nil)
+	}, images)
 	if err != nil {
 		a.fail(c, id, err, "/seller", badData, "No se pudo publicar.")
 		return
 	}
 	a.notice(c, "ok", "Publicación enviada. Quedará visible cuando un administrador la autorice.")
 	c.Redirect(http.StatusSeeOther, "/seller")
+}
+
+// uploadedImages lee las imágenes que eligió la persona en el formulario.
+// Si no eligió ninguna, el navegador manda un archivo vacío: se ignora. El
+// backend es quien valida el tipo, el tamaño y la cantidad.
+func uploadedImages(c *gin.Context) ([]uploadFile, error) {
+	form, err := c.MultipartForm()
+	if err != nil {
+		return nil, err
+	}
+	var images []uploadFile
+	for _, header := range form.File["images"] {
+		if header.Size == 0 {
+			continue
+		}
+		file, err := header.Open()
+		if err != nil {
+			return nil, err
+		}
+		data, err := io.ReadAll(io.LimitReader(file, maxImageBytes+1))
+		file.Close()
+		if err != nil {
+			return nil, err
+		}
+		images = append(images, uploadFile{name: header.Filename, data: data})
+	}
+	return images, nil
 }
 
 func (a *app) sold(c *gin.Context) {
