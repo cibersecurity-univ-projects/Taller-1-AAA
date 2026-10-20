@@ -11,10 +11,13 @@ import (
 type Vehicles struct {
 	vehicles *storage.Table[models.Vehicle]
 	users    *storage.Table[models.User]
+
+	// imagesDir es la carpeta donde se guardan las imágenes de las publicaciones.
+	imagesDir string
 }
 
-func NewVehicles(vehicles *storage.Table[models.Vehicle], users *storage.Table[models.User]) *Vehicles {
-	return &Vehicles{vehicles: vehicles, users: users}
+func NewVehicles(vehicles *storage.Table[models.Vehicle], users *storage.Table[models.User], imagesDir string) *Vehicles {
+	return &Vehicles{vehicles: vehicles, users: users, imagesDir: imagesDir}
 }
 
 type PublishInput struct {

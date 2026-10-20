@@ -57,7 +57,7 @@ func run() error {
 	}
 	defer logger.Close()
 
-	vehicleService := service.NewVehicles(vehicles, users)
+	vehicleService := service.NewVehicles(vehicles, users, filepath.Join(dataDir, "images"))
 	accountService := service.NewAccounts(users, vehicleService, auth.NewSessions(sessionTTL))
 	if err := accountService.EnsureAdmin(service.RegisterInput{
 		Name:     adminName,
