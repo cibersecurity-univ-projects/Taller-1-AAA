@@ -9,6 +9,11 @@
       "year": 2018,
       "price": 78000000,
       "mileage": 99000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.885774Z"
     },
@@ -20,6 +25,12 @@
       "year": 2016,
       "price": 112000000,
       "mileage": 120000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg",
+        "4.jpg"
+      ],
       "status": "pendiente",
       "created_at": "2026-10-13T15:32:52.5204226Z"
     },
@@ -31,6 +42,10 @@
       "year": 2019,
       "price": 62000000,
       "mileage": 67000,
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "status": "pendiente",
       "created_at": "2026-10-13T15:32:52.7347729Z"
     },
@@ -53,6 +68,10 @@
       "year": 2021,
       "price": 94500000,
       "mileage": 35000,
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9201686Z"
     },
@@ -64,6 +83,13 @@
       "year": 2022,
       "price": 52000000,
       "mileage": 12000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg",
+        "4.jpg",
+        "5.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9350285Z"
     },
@@ -75,6 +101,11 @@
       "year": 2020,
       "price": 89900000,
       "mileage": 48000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9419228Z"
     },
@@ -86,6 +117,9 @@
       "year": 2017,
       "price": 41500000,
       "mileage": 85000,
+      "images": [
+        "1.jpg"
+      ],
       "status": "vendida",
       "created_at": "2026-10-13T15:32:26.9564243Z"
     },
@@ -97,6 +131,12 @@
       "year": 2019,
       "price": 75000000,
       "mileage": 54000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg",
+        "4.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9650007Z"
     },
@@ -108,6 +148,10 @@
       "year": 2018,
       "price": 71000000,
       "mileage": 78000,
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9729799Z"
     }
