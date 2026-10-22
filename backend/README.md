@@ -25,7 +25,7 @@ El servidor necesita tres variables de entorno:
 **PowerShell**
 
 ```powershell
-$env:AUTOMARKET_AUDIT_KEY = "una-clave-secreta-de-al-menos-32-caracteres"
+$env:AUTOMARKET_AUDIT_KEY = "clave-secreta-de-auditoria-de-32-chars"
 $env:AUTOMARKET_ADMIN_EMAIL = "admin@automarket.co"
 $env:AUTOMARKET_ADMIN_PASSWORD = "AdminSegura123"
 go run .
@@ -34,7 +34,7 @@ go run .
 **Bash**
 
 ```bash
-export AUTOMARKET_AUDIT_KEY="una-clave-secreta-de-al-menos-32-caracteres"
+export AUTOMARKET_AUDIT_KEY="clave-secreta-de-auditoria-de-32-chars"
 export AUTOMARKET_ADMIN_EMAIL="admin@automarket.co"
 export AUTOMARKET_ADMIN_PASSWORD="AdminSegura123"
 go run .
@@ -46,6 +46,7 @@ lo indica.
 
 > Use siempre la **misma clave de auditoría** sobre una carpeta `data/` existente:
 > con otra clave la bitácora no verifica y el servidor se niega a arrancar.
+> La carpeta `data/` de ejemplo está firmada con la clave de los ejemplos de arriba.
 > Para empezar de cero, borre `data/`.
 
 ## Operaciones
