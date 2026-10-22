@@ -13,6 +13,8 @@
           <div>
             <strong>{{.Brand}} {{.Model}} {{.Year}}</strong>
             <span class="meta">$ {{money .Price}} · {{money .Mileage}} km · {{.Seller.Name}} · {{.Seller.Email}}</span>
+            {{$id := .ID}}
+            {{if .Images}}<div class="thumbs">{{range .Images}}<a href="/images/{{$id}}/{{.}}" target="_blank" rel="noopener"><img class="thumb" src="/images/{{$id}}/{{.}}" alt=""></a>{{end}}</div>{{end}}
           </div>
           <div class="actions">
             <form method="post" action="/admin/vehicles/{{.ID}}/approve">

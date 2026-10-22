@@ -43,6 +43,11 @@ func main() {
 
 	r := gin.New()
 	r.Use(gin.Recovery())
+	// Las páginas dependen de la sesión y de datos que cambian: que el
+	// navegador no las guarde y siempre muestre la lista actualizada.
+	r.Use(func(c *gin.Context) {
+		c.Header("Cache-Control", "no-store")
+	})
 	if err := r.SetTrustedProxies(nil); err != nil {
 		log.Fatal(err)
 	}
@@ -51,6 +56,7 @@ func main() {
 
 	r.GET("/", a.catalog)
 	r.GET("/vehicles/:id", a.detail)
+	r.GET("/images/:id/:name", a.image)
 	r.GET("/login", a.loginPage)
 	r.POST("/login", a.login)
 	r.GET("/register", a.registerPage)

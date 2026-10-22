@@ -139,3 +139,10 @@ input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-col
 .actions.end { justify-content: flex-end; }
 .btn.solid-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
 .btn.solid-danger:hover { background: #912018; }
+
+/* Imágenes */
+.card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+.gallery { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); margin-bottom: 20px; }
+.gallery img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.thumb { width: 64px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }

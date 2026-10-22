@@ -3,7 +3,13 @@
 
 <div class="detail">
   <section class="panel">
-    <div class="photo" aria-hidden="true">{{.V.Brand}}</div>
+    {{if .V.Images}}
+      <div class="gallery">
+        {{range .V.Images}}<a href="/images/{{$.V.ID}}/{{.}}" target="_blank" rel="noopener"><img src="/images/{{$.V.ID}}/{{.}}" alt=""></a>{{end}}
+      </div>
+    {{else}}
+      <div class="photo" aria-hidden="true">{{.V.Brand}}</div>
+    {{end}}
     <span class="eyebrow">{{.V.Brand}}</span>
     <h1>{{.V.Brand}} {{.V.Model}}</h1>
     <p class="price big">$ {{money .V.Price}}</p>
@@ -23,7 +29,6 @@
         <div><dt>Teléfono</dt><dd><a href="tel:{{.V.Seller.Phone}}">{{.V.Seller.Phone}}</a></dd></div>
         <div><dt>Correo</dt><dd><a href="mailto:{{.V.Seller.Email}}">{{.V.Seller.Email}}</a></dd></div>
       </dl>
-      <a class="btn full" href="mailto:{{.V.Seller.Email}}">Escribir al vendedor</a>
     {{else}}
       <p class="sub">Los datos de contacto se muestran cuando los solicitas.</p>
       <a class="btn full" href="/vehicles/{{.V.ID}}?contacto=1#contacto">Ver datos de contacto</a>

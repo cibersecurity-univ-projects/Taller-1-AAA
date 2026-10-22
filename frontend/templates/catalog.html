@@ -10,6 +10,7 @@
   <div class="grid">
     {{range .Vehicles}}
       <a class="card" href="/vehicles/{{.ID}}">
+        {{if .Images}}<img src="/images/{{.ID}}/{{index .Images 0}}" alt="">{{end}}
         <span class="eyebrow">{{.Brand}}</span>
         <h2>{{.Model}}</h2>
         <p class="price">$ {{money .Price}}</p>

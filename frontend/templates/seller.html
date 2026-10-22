@@ -7,7 +7,7 @@
 <div class="split">
   <section class="panel">
     <h2>Nueva publicación</h2>
-    <form method="post" action="/seller/publish" class="form">
+    <form method="post" action="/seller/publish" class="form" enctype="multipart/form-data">
       <div class="two">
         <label>Marca <input name="brand" maxlength="50" required></label>
         <label>Modelo <input name="model" maxlength="50" required></label>
@@ -17,6 +17,9 @@
         <label>Kilometraje <input name="mileage" type="number" min="0" value="0"></label>
       </div>
       <label>Precio (COP) <input name="price" type="number" min="1" required></label>
+      <label>Fotos (hasta 12, JPEG o PNG, máx. 2 MB)
+        <input name="images" type="file" accept="image/jpeg,image/png" multiple>
+      </label>
       <button class="btn full" type="submit">Publicar vehículo</button>
     </form>
   </section>
