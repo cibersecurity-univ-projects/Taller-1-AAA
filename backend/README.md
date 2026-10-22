@@ -57,9 +57,10 @@ devuelve `POST /auth/login`.
 |---|---|---|---|
 | `GET` | `/vehicles` | Todos (según el rol) | Lista de publicaciones |
 | `GET` | `/vehicles/:id` | Público | Vehículo y datos de contacto del vendedor |
+| `GET` | `/vehicles/:id/images/:name` | Todos (según el rol) | Una imagen de la publicación |
 | `POST` | `/auth/register` | Público | Registro de vendedor |
 | `POST` | `/auth/login` | Público | Inicio de sesión; devuelve el token |
-| `POST` | `/vehicles` | Vendedor | Publica un vehículo en estado `pendiente` |
+| `POST` | `/vehicles` | Vendedor | Publica un vehículo en estado `pendiente`, con hasta 12 imágenes |
 | `PATCH` | `/vehicles/:id/sold` | Vendedor dueño | Reporta la venta; sale del catálogo |
 | `PATCH` | `/vehicles/:id/approve` | Administrador | Autoriza una publicación pendiente |
 | `DELETE` | `/vehicles/:id` | Administrador | Elimina una publicación |
@@ -100,6 +101,30 @@ vendedor; el rol no se puede elegir.
 ```
 
 El año debe estar entre 1950 y el año siguiente al actual; el precio, mayor que cero.
+
+### Imágenes de una publicación
+
+Se envían al publicar, con el mismo `POST /vehicles`, como `multipart/form-data`:
+los campos `brand`, `model`, `year`, `price` y `mileage`, y hasta 12 archivos en el
+campo `images`. Sin imágenes también se puede enviar JSON, como antes.
+
+```bash
+curl -X POST http://localhost:8080/vehicles -H "Authorization: Bearer $TOKEN"   -F brand=Renault -F model=Koleos -F year=2018 -F price=78000000 -F mileage=99000   -F "images=@frente.jpg" -F "images=@interior.png"
+```
+
+| Regla | Detalle |
+|---|---|
+| Cantidad | Máximo 12 por publicación |
+| Tamaño | Máximo 2 MB cada una, y no más de 4 096 píxeles de ancho ni de alto |
+| Formato | Solo JPEG y PNG, comprobado por el **contenido** del archivo, no por su extensión |
+| Metadatos | Se descartan, incluida la ubicación GPS: la imagen se decodifica y se vuelve a codificar |
+| Nombre | Lo genera el servidor (`1.jpg`, `2.png`...); el nombre original se ignora |
+| Todo o nada | Si una imagen no es válida, no se guarda ninguna y la publicación no se crea |
+
+Cada imagen se pide con `GET /vehicles/:id/images/:name` (por ejemplo
+`/vehicles/5/images/1.jpg`). Sigue la visibilidad de la publicación: si está publicada
+la ve cualquiera; si está pendiente, solo su dueño y el administrador; en otro caso
+responde `404`. Al eliminar una publicación o a su vendedor se borran sus archivos.
 
 ### Códigos de respuesta
 
@@ -165,6 +190,7 @@ Archivos JSON dentro de `data/`:
 |---|---|
 | `users.json` | Usuarios, con la contraseña solo como hash |
 | `vehicles.json` | Publicaciones |
+| `images/<id>/` | Imágenes de cada publicación |
 | `audit.log` | Bitácora, una entrada por línea |
 
 La escritura es atómica (archivo temporal y renombrado) y los archivos se crean
@@ -203,3 +229,7 @@ curl -i -X POST $B/vehicles -H "$J" -d '{}'
   servidor y la operación, que ya se ejecutó, no se deshace.
 - No hay límite de intentos de inicio de sesión ni cierre de sesión explícito.
 - La persistencia en archivos JSON no está pensada para alta concurrencia.
+- Al descartar los metadatos de una foto se pierde también su orientación: las fotos
+  tomadas en vertical pueden verse giradas.
+- Las imágenes solo se pueden subir al publicar; no hay una operación para agregarlas
+  o cambiarlas después.

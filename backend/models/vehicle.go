@@ -18,6 +18,7 @@ type Vehicle struct {
 	Year      int           `json:"year"`
 	Price     int64         `json:"price"`
 	Mileage   int           `json:"mileage"`
+	Images    []string      `json:"images,omitempty"` // nombres de los archivos: 1.jpg, 2.png...
 	Status    VehicleStatus `json:"status"`
 	CreatedAt time.Time     `json:"created_at"`
 }

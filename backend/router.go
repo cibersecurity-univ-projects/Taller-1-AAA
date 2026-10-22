@@ -27,6 +27,7 @@ func newRouter(logger *audit.Logger, accounts *service.Accounts, vehicles *servi
 	// Visitante (HU-VIS-01) y registro/inicio de sesión.
 	r.GET("/vehicles", middleware.OptionalAuthenticate(accounts), vehicleHandler.Catalog)
 	r.GET("/vehicles/:id", vehicleHandler.Detail)
+	r.GET("/vehicles/:id/images/:name", middleware.OptionalAuthenticate(accounts), vehicleHandler.Image)
 	r.POST("/auth/register", accountHandler.Register)
 	r.POST("/auth/login", accountHandler.Login)
 

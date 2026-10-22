@@ -20,6 +20,7 @@ var errorStatus = map[error]int{
 	service.ErrInvalidCredentials: http.StatusUnauthorized,
 	service.ErrNotOwner:           http.StatusForbidden,
 	service.ErrInvalidState:       http.StatusConflict,
+	service.ErrInvalidImage:       http.StatusBadRequest,
 }
 
 // respondError responde con el código asociado al error. Los errores no

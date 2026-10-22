@@ -14,6 +14,7 @@ var (
 	ErrInvalidCredentials = errors.New("credenciales inválidas")
 	ErrNotOwner           = errors.New("el recurso pertenece a otro usuario")
 	ErrInvalidState       = errors.New("la operación no es válida en el estado actual del recurso")
+	ErrInvalidImage       = errors.New("imagen inválida: solo JPEG o PNG, de hasta 2 MB y máximo 12 por publicación")
 )
 
 // translate convierte los errores de persistencia en errores del dominio.
