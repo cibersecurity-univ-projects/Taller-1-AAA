@@ -1,0 +1,115 @@
+{
+  "next_id": 15,
+  "rows": {
+    "1": {
+      "id": 1,
+      "seller_id": 2,
+      "brand": "Renault",
+      "model": "Koleos Intens",
+      "year": 2018,
+      "price": 78000000,
+      "mileage": 99000,
+      "status": "publicada",
+      "created_at": "2026-10-13T15:32:26.885774Z"
+    },
+    "11": {
+      "id": 11,
+      "seller_id": 2,
+      "brand": "Toyota",
+      "model": "Hilux 4x4",
+      "year": 2016,
+      "price": 112000000,
+      "mileage": 120000,
+      "status": "pendiente",
+      "created_at": "2026-10-13T15:32:52.5204226Z"
+    },
+    "12": {
+      "id": 12,
+      "seller_id": 3,
+      "brand": "Renault",
+      "model": "Duster Zen",
+      "year": 2019,
+      "price": 62000000,
+      "mileage": 67000,
+      "status": "pendiente",
+      "created_at": "2026-10-13T15:32:52.7347729Z"
+    },
+    "13": {
+      "id": 13,
+      "seller_id": 4,
+      "brand": "Suzuki",
+      "model": "Swift GLX",
+      "year": 2023,
+      "price": 58000000,
+      "mileage": 8000,
+      "status": "pendiente",
+      "created_at": "2026-10-13T15:32:52.9458668Z"
+    },
+    "2": {
+      "id": 2,
+      "seller_id": 2,
+      "brand": "Mazda",
+      "model": "CX-30 Touring",
+      "year": 2021,
+      "price": 94500000,
+      "mileage": 35000,
+      "status": "publicada",
+      "created_at": "2026-10-13T15:32:26.9201686Z"
+    },
+    "4": {
+      "id": 4,
+      "seller_id": 3,
+      "brand": "Chevrolet",
+      "model": "Onix Turbo",
+      "year": 2022,
+      "price": 52000000,
+      "mileage": 12000,
+      "status": "publicada",
+      "created_at": "2026-10-13T15:32:26.9350285Z"
+    },
+    "5": {
+      "id": 5,
+      "seller_id": 3,
+      "brand": "Kia",
+      "model": "Sportage Revolution",
+      "year": 2020,
+      "price": 89900000,
+      "mileage": 48000,
+      "status": "publicada",
+      "created_at": "2026-10-13T15:32:26.9419228Z"
+    },
+    "7": {
+      "id": 7,
+      "seller_id": 3,
+      "brand": "Nissan",
+      "model": "Versa Advance",
+      "year": 2017,
+      "price": 41500000,
+      "mileage": 85000,
+      "status": "vendida",
+      "created_at": "2026-10-13T15:32:26.9564243Z"
+    },
+    "8": {
+      "id": 8,
+      "seller_id": 4,
+      "brand": "Volkswagen",
+      "model": "Golf Comfortline",
+      "year": 2019,
+      "price": 75000000,
+      "mileage": 54000,
+      "status": "publicada",
+      "created_at": "2026-10-13T15:32:26.9650007Z"
+    },
+    "9": {
+      "id": 9,
+      "seller_id": 4,
+      "brand": "Ford",
+      "model": "Escape Titanium",
+      "year": 2018,
+      "price": 71000000,
+      "mileage": 78000,
+      "status": "publicada",
+      "created_at": "2026-10-13T15:32:26.9729799Z"
+    }
+  }
+}

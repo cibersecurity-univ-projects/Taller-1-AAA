@@ -1,0 +1,24 @@
+{{template "header" .}}
+<section class="intro">
+  <h1>Vehículos en venta</h1>
+  <p>Consulta el catálogo y contacta directamente al vendedor.</p>
+</section>
+
+{{if .Error}}
+  <div class="empty"><h2>Catálogo no disponible</h2><p>{{.Error}}</p></div>
+{{else if .Vehicles}}
+  <div class="grid">
+    {{range .Vehicles}}
+      <a class="card" href="/vehicles/{{.ID}}">
+        {{if .Images}}<img src="/images/{{.ID}}/{{index .Images 0}}" alt="">{{end}}
+        <span class="eyebrow">{{.Brand}}</span>
+        <h2>{{.Model}}</h2>
+        <p class="price">$ {{money .Price}}</p>
+        <p class="meta">{{.Year}} · {{money .Mileage}} km</p>
+      </a>
+    {{end}}
+  </div>
+{{else}}
+  <div class="empty"><h2>Aún no hay vehículos publicados</h2><p>Vuelve pronto.</p></div>
+{{end}}
+{{template "footer" .}}

@@ -1,0 +1,41 @@
+{
+  "next_id": 6,
+  "rows": {
+    "1": {
+      "id": 1,
+      "name": "Administrador",
+      "email": "admin@automarket.co",
+      "phone": "",
+      "role": "administrador",
+      "password_hash": "pbkdf2-sha256$600000$1nsQ8HBGn64ktX4EWmtjZQ$UFgUGSXUQSP2z6Z3j1rNI9NZ1VFgA9GNHBp1Z9OFkPI",
+      "created_at": "2026-10-13T15:29:31.2331619Z"
+    },
+    "2": {
+      "id": 2,
+      "name": "Vendedor de Pruebas",
+      "email": "vendedor@automarket.co",
+      "phone": "3001234567",
+      "role": "vendedor",
+      "password_hash": "pbkdf2-sha256$600000$Vix9AQGZcZmI2SVIO3ov8Q$VxPg2yrS97oR+V0QMgzB3PP3wkKE7wcM+0Jl8TB/02g",
+      "created_at": "2026-10-13T15:29:40.9461073Z"
+    },
+    "3": {
+      "id": 3,
+      "name": "Carlos Ramirez",
+      "email": "carlos.ramirez@automarket.co",
+      "phone": "3105551201",
+      "role": "vendedor",
+      "password_hash": "pbkdf2-sha256$600000$YTAk85fiqVNc4gKnma8YVg$Tn/uazPUQY75YMs/CizPJxIrqe4thEzYJvyVXXBXA0M",
+      "created_at": "2026-10-13T15:32:26.1010748Z"
+    },
+    "4": {
+      "id": 4,
+      "name": "Maria Fernanda Lopez",
+      "email": "maria.lopez@automarket.co",
+      "phone": "3115551302",
+      "role": "vendedor",
+      "password_hash": "pbkdf2-sha256$600000$MAG1qbXMsp0Ut9i1inNW0Q$05zMdSS6h+7WZ5KB48f/YVvRVfvvFzqtGeRp5Kur0B0",
+      "created_at": "2026-10-13T15:32:26.3004366Z"
+    }
+  }
+}
