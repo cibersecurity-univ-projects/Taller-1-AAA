@@ -1,5 +1,5 @@
 {
-  "next_id": 15,
+  "next_id": 18,
   "rows": {
     "1": {
       "id": 1,
@@ -9,6 +9,11 @@
       "year": 2018,
       "price": 78000000,
       "mileage": 99000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.885774Z"
     },
@@ -20,6 +25,12 @@
       "year": 2016,
       "price": 112000000,
       "mileage": 120000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg",
+        "4.jpg"
+      ],
       "status": "pendiente",
       "created_at": "2026-10-13T15:32:52.5204226Z"
     },
@@ -31,19 +42,58 @@
       "year": 2019,
       "price": 62000000,
       "mileage": 67000,
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "status": "pendiente",
       "created_at": "2026-10-13T15:32:52.7347729Z"
     },
-    "13": {
-      "id": 13,
+    "15": {
+      "id": 15,
       "seller_id": 4,
-      "brand": "Suzuki",
-      "model": "Swift GLX",
-      "year": 2023,
-      "price": 58000000,
-      "mileage": 8000,
+      "brand": "Chevrolet",
+      "model": "Onix Turbo",
+      "year": 2021,
+      "price": 49500000,
+      "mileage": 28000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg"
+      ],
+      "status": "publicada",
+      "created_at": "2026-10-14T14:10:11.412380Z"
+    },
+    "16": {
+      "id": 16,
+      "seller_id": 3,
+      "brand": "Volkswagen",
+      "model": "Golf Comfortline",
+      "year": 2020,
+      "price": 79000000,
+      "mileage": 41000,
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
+      "status": "publicada",
+      "created_at": "2026-10-14T14:12:40.731905Z"
+    },
+    "17": {
+      "id": 17,
+      "seller_id": 4,
+      "brand": "Kia",
+      "model": "Sportage Revolution",
+      "year": 2021,
+      "price": 93000000,
+      "mileage": 33000,
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "status": "pendiente",
-      "created_at": "2026-10-13T15:32:52.9458668Z"
+      "created_at": "2026-10-14T14:15:02.208776Z"
     },
     "2": {
       "id": 2,
@@ -53,6 +103,10 @@
       "year": 2021,
       "price": 94500000,
       "mileage": 35000,
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9201686Z"
     },
@@ -64,6 +118,13 @@
       "year": 2022,
       "price": 52000000,
       "mileage": 12000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg",
+        "4.jpg",
+        "5.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9350285Z"
     },
@@ -75,6 +136,11 @@
       "year": 2020,
       "price": 89900000,
       "mileage": 48000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9419228Z"
     },
@@ -86,6 +152,9 @@
       "year": 2017,
       "price": 41500000,
       "mileage": 85000,
+      "images": [
+        "1.jpg"
+      ],
       "status": "vendida",
       "created_at": "2026-10-13T15:32:26.9564243Z"
     },
@@ -97,6 +166,12 @@
       "year": 2019,
       "price": 75000000,
       "mileage": 54000,
+      "images": [
+        "1.jpg",
+        "2.jpg",
+        "3.jpg",
+        "4.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9650007Z"
     },
@@ -108,6 +183,10 @@
       "year": 2018,
       "price": 71000000,
       "mileage": 78000,
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "status": "publicada",
       "created_at": "2026-10-13T15:32:26.9729799Z"
     }
