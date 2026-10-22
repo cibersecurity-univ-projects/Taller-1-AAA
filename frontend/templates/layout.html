@@ -1,0 +1,48 @@
+{{define "header"}}<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}} · AutoMarket</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="bar">
+      <a class="brand" href="/">Auto<span>Market</span></a>
+      <nav>
+        {{if .User}}
+          <a class="link" href="{{.User.Home}}">Mi panel</a>
+          <span class="who">{{.User.Email}}</span>
+          <form method="post" action="/logout"><button class="btn ghost small" type="submit">Salir</button></form>
+        {{else}}
+          <a class="btn ghost small" href="/login">Iniciar sesión</a>
+          <a class="btn small" href="/register">Registrarse como vendedor</a>
+        {{end}}
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    {{with .Flash}}<div class="flash {{.Kind}}" role="status">{{.Text}}</div>{{end}}
+{{end}}
+
+{{/* Modal de confirmación sin JavaScript: se abre con el enlace #id (CSS :target). */}}
+{{define "confirm"}}
+<div class="modal" id="{{.ID}}" role="dialog" aria-modal="true" aria-labelledby="{{.ID}}-title">
+  <a class="modal-backdrop" href="#" aria-label="Cerrar"></a>
+  <form method="post" action="{{.Action}}" class="modal-box">
+    <h2 id="{{.ID}}-title">{{.Title}}</h2>
+    <p>{{.Text}}</p>
+    <div class="actions end">
+      <a class="btn ghost" href="#">Cancelar</a>
+      <button class="btn {{.Kind}}" type="submit">{{.Button}}</button>
+    </div>
+  </form>
+</div>
+{{end}}
+
+{{define "footer"}}
+  </main>
+</body>
+</html>
+{{end}}
