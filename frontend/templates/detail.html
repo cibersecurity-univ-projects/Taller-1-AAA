@@ -29,7 +29,6 @@
         <div><dt>Teléfono</dt><dd><a href="tel:{{.V.Seller.Phone}}">{{.V.Seller.Phone}}</a></dd></div>
         <div><dt>Correo</dt><dd><a href="mailto:{{.V.Seller.Email}}">{{.V.Seller.Email}}</a></dd></div>
       </dl>
-      <a class="btn full" href="mailto:{{.V.Seller.Email}}">Escribir al vendedor</a>
     {{else}}
       <p class="sub">Los datos de contacto se muestran cuando los solicitas.</p>
       <a class="btn full" href="/vehicles/{{.V.ID}}?contacto=1#contacto">Ver datos de contacto</a>
